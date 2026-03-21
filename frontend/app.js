@@ -29,6 +29,7 @@ let state = {
   playerCards: [],
   gameOrder: [],
   currentNameIndex: 0,
+  currentPlayerIndex: 0,
 };
 
 function showScreen(screenId) {
@@ -129,40 +130,49 @@ function addPlayerName() {
   renderNextName();
 }
 
-function renderPlayerCards() {
-  const grid = document.getElementById("player-cards-grid");
-  grid.innerHTML = state.playerCards
-    .map(
-      (card, i) => `
-    <div class="player-card ${card.type === "pista" ? "impostor" : ""}" data-index="${i}" tabindex="0" role="button">
-      <span class="card-name">${escapeHtml(card.name)}</span>
-      <span class="card-secret" data-secret="${escapeHtml(card.value)}">Mantén apretado</span>
-    </div>
-  `
-    )
-    .join("");
+function renderRoleScreen() {
+  state.currentPlayerIndex = 0;
+  showCurrentPlayerCard();
+}
 
-  grid.querySelectorAll(".player-card").forEach((el) => {
-    const secretEl = el.querySelector(".card-secret");
-    const secret = secretEl.dataset.secret;
+function showCurrentPlayerCard() {
+  const card = state.playerCards[state.currentPlayerIndex];
+  const isLast = state.currentPlayerIndex === state.numJugadores - 1;
 
-    const show = () => {
-      secretEl.textContent = secret;
-      el.classList.add("revealed");
-    };
-    const hide = () => {
-      secretEl.textContent = "Mantén apretado";
-      el.classList.remove("revealed");
-    };
+  document.getElementById("player-turn").textContent = `${card.name}, es tu turno`;
+  document.getElementById("card-player-name").textContent = card.name;
+  document.getElementById("card-secret-value").textContent = card.value;
+  document.getElementById("flip-card").classList.remove("flipped");
 
-    el.addEventListener("pointerdown", (e) => {
-      e.preventDefault();
-      show();
-    });
-    el.addEventListener("pointerup", hide);
-    el.addEventListener("pointerleave", hide);
-    el.addEventListener("pointercancel", hide);
+  const btn = document.getElementById("next-player-btn");
+  btn.textContent = isLast ? "Todos vimos → Sortear orden" : "Siguiente jugador →";
+  btn.onclick = goNextPlayer;
+
+  setupFlipCardListeners();
+}
+
+function setupFlipCardListeners() {
+  const flipCard = document.getElementById("flip-card");
+  flipCard.replaceWith(flipCard.cloneNode(true));
+  const newFlipCard = document.getElementById("flip-card");
+
+  newFlipCard.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    newFlipCard.classList.add("flipped");
   });
+  newFlipCard.addEventListener("pointerup", () => newFlipCard.classList.remove("flipped"));
+  newFlipCard.addEventListener("pointerleave", () => newFlipCard.classList.remove("flipped"));
+  newFlipCard.addEventListener("pointercancel", () => newFlipCard.classList.remove("flipped"));
+}
+
+function goNextPlayer() {
+  if (state.currentPlayerIndex < state.numJugadores - 1) {
+    state.currentPlayerIndex++;
+    showCurrentPlayerCard();
+  } else {
+    showScreen("roulette");
+    runRoulette();
+  }
 }
 
 function runRoulette() {
@@ -175,26 +185,35 @@ function runRoulette() {
   resultEl.classList.add("hidden");
   doneBtn.classList.add("hidden");
 
-  const segmentAngle = 360 / names.length;
+  const n = names.length;
+  const segmentAngle = 360 / n;
+
+  const colors = ["#1a1a24", "#252530", "#1e1e2a", "#2a2a36", "#22222e"];
+  const gradientStops = names
+    .map((_, i) => `${colors[i % colors.length]} ${i * segmentAngle}deg ${(i + 1) * segmentAngle}deg`)
+    .join(", ");
+  wheel.style.background = `conic-gradient(${gradientStops})`;
+
   wheel.innerHTML = names
     .map(
       (name, i) => {
         const angle = i * segmentAngle + segmentAngle / 2;
-        return `<span class="roulette-name" style="--angle: ${angle}deg">${escapeHtml(name)}</span>`;
+        return `<span class="roulette-segment-label" style="--angle: ${angle}deg; --n: ${n}">${escapeHtml(name)}</span>`;
       }
     )
     .join("");
 
+  wheel.style.setProperty("--segments", n);
   wheel.style.transform = "rotate(0deg)";
 
-  const winnerIndex = Math.floor(Math.random() * names.length);
+  const winnerIndex = Math.floor(Math.random() * n);
   const winner = names[winnerIndex];
   const spins = 5 + Math.floor(Math.random() * 2);
   const targetRotation = 360 * spins + (360 - winnerIndex * segmentAngle - segmentAngle / 2);
 
-  requestAnimationFrame(() => {
+  setTimeout(() => {
     wheel.style.transform = `rotate(${targetRotation}deg)`;
-  });
+  }, 50);
 
   setTimeout(() => {
     resultEl.textContent = `¡${winner} empieza!`;
@@ -255,10 +274,6 @@ document.getElementById("player-name-input").addEventListener("keydown", (e) => 
   if (e.key === "Enter") addPlayerName();
 });
 
-document.getElementById("roles-done-btn").addEventListener("click", () => {
-  showScreen("roulette");
-  runRoulette();
-});
 
 document.getElementById("roulette-done-btn").addEventListener("click", () => {
   const orderEl = document.getElementById("game-order");
@@ -292,7 +307,7 @@ async function initRoles() {
     state.palabra = data.palabra;
     state.pista = data.pista;
     setupPlayerCards();
-    renderPlayerCards();
+    renderRoleScreen();
     showScreen("roles");
   } catch (err) {
     showError(err.message || "No se pudo conectar con el servidor. ¿Está el backend ejecutándose?");

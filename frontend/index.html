@@ -68,12 +68,25 @@
       </div>
     </section>
 
-    <!-- Pantalla 3: Repartición de roles (mantener apretado para revelar) -->
+    <!-- Pantalla 3: Repartición de roles (una tarjeta por pantalla, mantener apretado para revelar) -->
     <section id="screen-roles" class="screen">
       <div class="screen-content roles-content">
-        <p class="roles-instruction">Mantén apretada tu tarjeta para ver tu palabra. Suelta para ocultar.</p>
-        <div class="player-cards-grid" id="player-cards-grid"></div>
-        <button class="primary-btn" id="roles-done-btn">Todos vimos → Sortear orden</button>
+        <p class="player-turn" id="player-turn">Marcelo, es tu turno</p>
+        <p class="roles-instruction">Mantén apretada la tarjeta para ver tu palabra. Suelta para ocultar.</p>
+        <div class="flip-card-container" id="flip-card-container">
+          <div class="flip-card" id="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <span class="card-player-name" id="card-player-name">Marcelo</span>
+                <span class="card-hint">Toca y mantén</span>
+              </div>
+              <div class="flip-card-back">
+                <span class="card-secret-value" id="card-secret-value">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="primary-btn" id="next-player-btn">Siguiente jugador →</button>
       </div>
     </section>
 
@@ -81,9 +94,9 @@
     <section id="screen-roulette" class="screen">
       <div class="screen-content roulette-content">
         <h2 class="screen-title">¿Quién empieza?</h2>
-        <div class="roulette-container">
+        <div class="roulette-wrapper">
+          <div class="roulette-pointer">▼</div>
           <div class="roulette-wheel" id="roulette-wheel"></div>
-          <div class="roulette-pointer" id="roulette-pointer">▼</div>
         </div>
         <p class="roulette-result" id="roulette-result"></p>
         <button class="primary-btn hidden" id="roulette-done-btn">¡A jugar!</button>
