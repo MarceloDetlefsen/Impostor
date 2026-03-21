@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎭 Juego del Impostor</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="app">
+    <!-- Pantalla 1: Inicio - Selección de categoría -->
+    <section id="screen-home" class="screen active">
+      <div class="screen-content">
+        <h1 class="title">🎭 Impostor</h1>
+        <p class="subtitle">El party game de las palabras secretas</p>
+        <p class="instruction">Elige una categoría para comenzar</p>
+        <div class="categories">
+          <button class="category-btn" data-categoria="futbolistas">
+            <span class="category-icon">⚽</span>
+            <span>Futbolistas</span>
+          </button>
+          <button class="category-btn" data-categoria="musica">
+            <span class="category-icon">🎵</span>
+            <span>Música</span>
+          </button>
+          <button class="category-btn" data-categoria="videojuegos">
+            <span class="category-icon">🎮</span>
+            <span>Videojuegos</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pantalla 2: Configuración - Número de jugadores -->
+    <section id="screen-config" class="screen">
+      <div class="screen-content">
+        <h2 class="screen-title">Configuración</h2>
+        <p class="category-badge" id="selected-category"></p>
+        <p class="instruction">¿Cuántos jugadores?</p>
+        <div class="player-select">
+          <button class="player-btn" data-players="3">3</button>
+          <button class="player-btn" data-players="4">4</button>
+          <button class="player-btn" data-players="5">5</button>
+          <button class="player-btn" data-players="6">6</button>
+          <button class="player-btn" data-players="7">7</button>
+          <button class="player-btn" data-players="8">8</button>
+        </div>
+        <p class="hint">Recomendado: 4–6 jugadores</p>
+        <button class="primary-btn" id="start-game-btn">Comenzar partida</button>
+        <button class="back-btn" id="back-to-home">← Volver</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 3: Repartición de roles (pasar dispositivo) -->
+    <section id="screen-roles" class="screen">
+      <div class="screen-content roles-content">
+        <p class="player-indicator" id="player-indicator">Jugador 1</p>
+        <div class="role-card" id="role-card">
+          <span class="role-label" id="role-label">Tu palabra secreta</span>
+          <span class="role-value" id="role-value">—</span>
+        </div>
+        <p class="roles-instruction">Pasa el dispositivo al siguiente jugador. No mires cuando no sea tu turno.</p>
+        <button class="primary-btn" id="next-player-btn">Siguiente jugador →</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 4: Juego en curso -->
+    <section id="screen-game" class="screen">
+      <div class="screen-content">
+        <h2 class="screen-title">¡A jugar!</h2>
+        <div class="rules-reminder">
+          <h3>Reglas</h3>
+          <ul>
+            <li>Por turnos, cada jugador dice <strong>una sola palabra</strong> relacionada con la palabra secreta</li>
+            <li>El Impostor no conoce la palabra; debe camuflarse con la pista que tiene</li>
+            <li>Al final, voten para adivinar quién es el Impostor</li>
+            <li><strong>Impostor gana</strong> si no lo descubren, o si adivina la palabra antes de ser votado</li>
+          </ul>
+        </div>
+        <button class="primary-btn" id="reveal-btn">Revelar resultado</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 5: Revelación -->
+    <section id="screen-reveal" class="screen">
+      <div class="screen-content">
+        <h2 class="screen-title">🎉 Resultado</h2>
+        <div class="reveal-card">
+          <p class="reveal-word">La palabra era: <strong id="reveal-word"></strong></p>
+          <p class="reveal-impostor">El Impostor era el jugador <span id="reveal-impostor-num"></span></p>
+        </div>
+        <button class="primary-btn" id="play-again-btn">Jugar de nuevo</button>
+      </div>
+    </section>
+
+    <!-- Loading overlay -->
+    <div id="loading-overlay" class="overlay hidden">
+      <div class="loader"></div>
+      <p>Cargando...</p>
+    </div>
+
+    <!-- Error overlay -->
+    <div id="error-overlay" class="overlay hidden">
+      <p class="error-message" id="error-message"></p>
+      <button class="primary-btn" id="retry-btn">Reintentar</button>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
