@@ -84,6 +84,7 @@ function renderNamesScreen() {
   state.currentNameIndex = 0;
   state.playerNames = [];
   document.getElementById("names-instruction").textContent = "Nombre del jugador 1";
+  document.getElementById("player-name-input").placeholder = "Por defecto: Jugador 1";
   document.getElementById("player-name-input").value = "";
   document.getElementById("player-name-input").focus();
   document.getElementById("names-list").innerHTML = "";
@@ -98,6 +99,7 @@ function renderNextName() {
 
   if (idx < total) {
     document.getElementById("names-instruction").textContent = `Nombre del jugador ${idx + 1}`;
+    input.placeholder = `Por defecto: Jugador ${idx + 1}`;
     input.value = "";
     input.focus();
     btn.textContent = idx === total - 1 ? "Comenzar" : "Siguiente";
@@ -138,10 +140,27 @@ function renderRoleScreen() {
 function showCurrentPlayerCard() {
   const card = state.playerCards[state.currentPlayerIndex];
   const isLast = state.currentPlayerIndex === state.numJugadores - 1;
+  const isImpostor = card.type === "pista";
 
   document.getElementById("player-turn").textContent = `${card.name}, es tu turno`;
   document.getElementById("card-player-name").textContent = card.name;
-  document.getElementById("card-secret-value").textContent = card.value;
+
+  const backEl = document.getElementById("flip-card-back");
+  const impostorLabel = document.getElementById("card-impostor-label");
+  const secretValue = document.getElementById("card-secret-value");
+
+  if (isImpostor) {
+    impostorLabel.textContent = "Eres el IMPOSTOR";
+    impostorLabel.classList.add("visible");
+    secretValue.textContent = `Pistas: ${card.value}`;
+    backEl.classList.add("impostor");
+  } else {
+    impostorLabel.textContent = "";
+    impostorLabel.classList.remove("visible");
+    secretValue.textContent = card.value;
+    backEl.classList.remove("impostor");
+  }
+
   document.getElementById("flip-card").classList.remove("flipped");
 
   const btn = document.getElementById("next-player-btn");
@@ -198,7 +217,7 @@ function runRoulette() {
     .map(
       (name, i) => {
         const angle = i * segmentAngle + segmentAngle / 2;
-        return `<span class="roulette-segment-label" style="--angle: ${angle}deg; --n: ${n}">${escapeHtml(name)}</span>`;
+        return `<div class="roulette-segment-label" style="--angle: ${angle}deg"><span>${escapeHtml(name)}</span></div>`;
       }
     )
     .join("");

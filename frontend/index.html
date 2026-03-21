@@ -60,7 +60,7 @@
         <h2 class="screen-title">Nombres</h2>
         <p class="instruction" id="names-instruction">Nombre del jugador 1</p>
         <div class="names-form">
-          <input type="text" id="player-name-input" placeholder="Ej: Marcelo" maxlength="20" autocomplete="off">
+          <input type="text" id="player-name-input" placeholder="Por defecto: Jugador 1" maxlength="20" autocomplete="off">
           <button class="primary-btn" id="next-name-btn">Siguiente</button>
         </div>
         <div class="names-list" id="names-list"></div>
@@ -80,7 +80,8 @@
                 <span class="card-player-name" id="card-player-name">Marcelo</span>
                 <span class="card-hint">Toca y mantén</span>
               </div>
-              <div class="flip-card-back">
+              <div class="flip-card-back" id="flip-card-back">
+                <span class="card-impostor-label" id="card-impostor-label"></span>
                 <span class="card-secret-value" id="card-secret-value">—</span>
               </div>
             </div>
