@@ -81,8 +81,13 @@
                 <span class="card-hint">Toca y mantén</span>
               </div>
               <div class="flip-card-back" id="flip-card-back">
-                <span class="card-impostor-label" id="card-impostor-label"></span>
-                <span class="card-secret-value" id="card-secret-value">—</span>
+                <div class="card-back-impostor" id="card-back-impostor">
+                  <span class="card-impostor-label">Eres el IMPOSTOR</span>
+                  <span class="card-impostor-pista" id="card-impostor-pista">—</span>
+                </div>
+                <div class="card-back-normal" id="card-back-normal">
+                  <span class="card-secret-value" id="card-secret-value">—</span>
+                </div>
               </div>
             </div>
           </div>
@@ -97,7 +102,9 @@
         <h2 class="screen-title">¿Quién empieza?</h2>
         <div class="roulette-wrapper">
           <div class="roulette-pointer">▼</div>
-          <div class="roulette-wheel" id="roulette-wheel"></div>
+          <div class="roulette-viewport">
+            <div class="roulette-wheel" id="roulette-wheel"></div>
+          </div>
         </div>
         <p class="roulette-result" id="roulette-result"></p>
         <button class="primary-btn hidden" id="roulette-done-btn">¡A jugar!</button>

@@ -322,6 +322,7 @@ body::before {
   height: 100%;
   transition: transform 0.4s ease;
   transform-style: preserve-3d;
+  isolation: isolate;
 }
 
 .flip-card.flipped .flip-card-inner {
@@ -331,6 +332,7 @@ body::before {
 .flip-card-front,
 .flip-card-back {
   position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
@@ -343,6 +345,7 @@ body::before {
   justify-content: center;
   gap: 0.75rem;
   padding: 1.5rem;
+  overflow: hidden;
 }
 
 .flip-card-front {
@@ -360,8 +363,22 @@ body::before {
   border-color: var(--impostor);
 }
 
-.card-impostor-label {
+.card-back-impostor,
+.card-back-normal {
   display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.card-back-impostor.visible,
+.card-back-normal.visible {
+  display: flex;
+}
+
+.card-impostor-label {
   font-size: 1.1rem;
   font-weight: 800;
   color: var(--impostor);
@@ -369,13 +386,10 @@ body::before {
   letter-spacing: 0.05em;
 }
 
-.card-impostor-label.visible {
-  display: block;
-}
-
-.flip-card-back.impostor .card-secret-value {
-  color: var(--impostor);
+.card-impostor-pista {
   font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--impostor);
 }
 
 .card-player-name {
@@ -407,13 +421,19 @@ body::before {
   height: 280px;
 }
 
+.roulette-viewport {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid var(--accent);
+}
+
 .roulette-wheel {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 4px solid var(--accent);
   position: relative;
-  overflow: hidden;
   transition: transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
 }
 
@@ -421,21 +441,14 @@ body::before {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 2px;
-  height: 38%;
-  transform-origin: center 0;
-  transform: translate(-50%, -50%) rotate(var(--angle));
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  transform-origin: center center;
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-90px);
   pointer-events: none;
 }
 
-.roulette-segment-label span {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%) translateY(100%);
+.roulette-segment-label .roulette-name-text {
+  display: block;
+  transform: rotate(calc(-1 * var(--angle)));
   font-size: 0.75rem;
   font-weight: 700;
   color: var(--text);

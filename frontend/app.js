@@ -146,17 +146,19 @@ function showCurrentPlayerCard() {
   document.getElementById("card-player-name").textContent = card.name;
 
   const backEl = document.getElementById("flip-card-back");
-  const impostorLabel = document.getElementById("card-impostor-label");
+  const impostorBlock = document.getElementById("card-back-impostor");
+  const normalBlock = document.getElementById("card-back-normal");
+  const impostorPista = document.getElementById("card-impostor-pista");
   const secretValue = document.getElementById("card-secret-value");
 
   if (isImpostor) {
-    impostorLabel.textContent = "Eres el IMPOSTOR";
-    impostorLabel.classList.add("visible");
-    secretValue.textContent = `Pistas: ${card.value}`;
+    impostorBlock.classList.add("visible");
+    normalBlock.classList.remove("visible");
+    impostorPista.textContent = `Pistas: ${card.value}`;
     backEl.classList.add("impostor");
   } else {
-    impostorLabel.textContent = "";
-    impostorLabel.classList.remove("visible");
+    impostorBlock.classList.remove("visible");
+    normalBlock.classList.add("visible");
     secretValue.textContent = card.value;
     backEl.classList.remove("impostor");
   }
@@ -211,13 +213,13 @@ function runRoulette() {
   const gradientStops = names
     .map((_, i) => `${colors[i % colors.length]} ${i * segmentAngle}deg ${(i + 1) * segmentAngle}deg`)
     .join(", ");
-  wheel.style.background = `conic-gradient(${gradientStops})`;
+  wheel.style.background = `conic-gradient(from 0deg, ${gradientStops})`;
 
   wheel.innerHTML = names
     .map(
       (name, i) => {
         const angle = i * segmentAngle + segmentAngle / 2;
-        return `<div class="roulette-segment-label" style="--angle: ${angle}deg"><span>${escapeHtml(name)}</span></div>`;
+        return `<div class="roulette-segment-label" style="--angle: ${angle}deg"><span class="roulette-name-text">${escapeHtml(name)}</span></div>`;
       }
     )
     .join("");
