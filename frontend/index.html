@@ -14,8 +14,8 @@
     <!-- Pantalla 1: Inicio - Selección de categoría -->
     <section id="screen-home" class="screen active">
       <div class="screen-content">
-        <h1 class="title">🎭 Impostor</h1>
-        <p class="subtitle">El party game de las palabras secretas</p>
+        <h1 class="title">Impostor</h1>
+        <p class="subtitle">Dineeeeeeeeeeeeero</p>
         <p class="instruction">Elige una categoría para comenzar</p>
         <div class="categories">
           <button class="category-btn" data-categoria="futbolistas">
@@ -49,21 +49,44 @@
           <button class="player-btn" data-players="8">8</button>
         </div>
         <p class="hint">Recomendado: 4–6 jugadores</p>
-        <button class="primary-btn" id="start-game-btn">Comenzar partida</button>
+        <button class="primary-btn" id="to-names-btn">Siguiente</button>
         <button class="back-btn" id="back-to-home">← Volver</button>
       </div>
     </section>
 
-    <!-- Pantalla 3: Repartición de roles (pasar dispositivo) -->
+    <!-- Pantalla 2b: Nombres de jugadores -->
+    <section id="screen-names" class="screen">
+      <div class="screen-content">
+        <h2 class="screen-title">Nombres</h2>
+        <p class="instruction" id="names-instruction">Nombre del jugador 1</p>
+        <div class="names-form">
+          <input type="text" id="player-name-input" placeholder="Ej: Marcelo" maxlength="20" autocomplete="off">
+          <button class="primary-btn" id="next-name-btn">Siguiente</button>
+        </div>
+        <div class="names-list" id="names-list"></div>
+        <button class="back-btn" id="back-to-config">← Volver</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 3: Repartición de roles (mantener apretado para revelar) -->
     <section id="screen-roles" class="screen">
       <div class="screen-content roles-content">
-        <p class="player-indicator" id="player-indicator">Jugador 1</p>
-        <div class="role-card" id="role-card">
-          <span class="role-label" id="role-label">Tu palabra secreta</span>
-          <span class="role-value" id="role-value">—</span>
+        <p class="roles-instruction">Mantén apretada tu tarjeta para ver tu palabra. Suelta para ocultar.</p>
+        <div class="player-cards-grid" id="player-cards-grid"></div>
+        <button class="primary-btn" id="roles-done-btn">Todos vimos → Sortear orden</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 3b: Ruleta para orden de inicio -->
+    <section id="screen-roulette" class="screen">
+      <div class="screen-content roulette-content">
+        <h2 class="screen-title">¿Quién empieza?</h2>
+        <div class="roulette-container">
+          <div class="roulette-wheel" id="roulette-wheel"></div>
+          <div class="roulette-pointer" id="roulette-pointer">▼</div>
         </div>
-        <p class="roles-instruction">Pasa el dispositivo al siguiente jugador. No mires cuando no sea tu turno.</p>
-        <button class="primary-btn" id="next-player-btn">Siguiente jugador →</button>
+        <p class="roulette-result" id="roulette-result"></p>
+        <button class="primary-btn hidden" id="roulette-done-btn">¡A jugar!</button>
       </div>
     </section>
 
@@ -71,6 +94,7 @@
     <section id="screen-game" class="screen">
       <div class="screen-content">
         <h2 class="screen-title">¡A jugar!</h2>
+        <p class="game-order hidden" id="game-order"></p>
         <div class="rules-reminder">
           <h3>Reglas</h3>
           <ul>
@@ -90,7 +114,7 @@
         <h2 class="screen-title">🎉 Resultado</h2>
         <div class="reveal-card">
           <p class="reveal-word">La palabra era: <strong id="reveal-word"></strong></p>
-          <p class="reveal-impostor">El Impostor era el jugador <span id="reveal-impostor-num"></span></p>
+          <p class="reveal-impostor">El Impostor era <strong id="reveal-impostor-name"></strong></p>
         </div>
         <button class="primary-btn" id="play-again-btn">Jugar de nuevo</button>
       </div>
