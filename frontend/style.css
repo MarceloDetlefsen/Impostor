@@ -328,6 +328,11 @@ body::before {
   transform: rotateY(180deg);
 }
 
+.flip-card.flipped .flip-card-front {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .flip-card-front,
 .flip-card-back {
   position: absolute;
@@ -349,12 +354,14 @@ body::before {
 
 .flip-card-front {
   background: var(--bg-card);
+  z-index: 1;
 }
 
 .flip-card-back {
   background: var(--bg-card);
   transform: rotateY(180deg);
   border-color: var(--accent);
+  z-index: 2;
 }
 
 .flip-card-back-content {
