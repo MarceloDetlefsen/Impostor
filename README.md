@@ -9,7 +9,7 @@ Web app para jugar el **Juego del Impostor** en grupo — un party game de palab
 
 ## ¿Cómo se juega?
 
-1. Eligen un **tema** (Futbolistas, Música o Videojuegos)
+1. Eligen un **tema** (Futbolistas, Música, Videojuegos o Famosos)
 2. Ingresan el **número de jugadores** (3–8) y el **nombre** de cada uno
 3. Cada jugador ve su rol en pantallas separadas: **mantienen apretada** la tarjeta para ver su palabra o pista
 4. El **Impostor** recibe solo una pista (1–2 palabras); el resto recibe la palabra secreta
@@ -69,7 +69,7 @@ window.IMPOSTOR_API_URL = "https://impostor-production-e89b.up.railway.app";
 
 ## API
 
-### `GET /palabra?categoria={futbolistas|musica|videojuegos}`
+### `GET /palabra?categoria={futbolistas|musica|videojuegos|famosos}`
 
 Devuelve una palabra aleatoria y su pista (ambigua, 1–2 palabras para el Impostor):
 
@@ -98,7 +98,8 @@ Comprueba que el servidor está activo.
 │   └── data/
 │       ├── futbolistas.csv
 │       ├── musica.csv
-│       └── videojuegos.csv
+│       ├── videojuegos.csv
+│       └── famosos.csv
 ├── CONTEXT.md
 └── README.md
 ```

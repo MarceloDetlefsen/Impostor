@@ -7,6 +7,7 @@ const CATEGORY_LABELS = {
   futbolistas: "⚽ Futbolistas",
   musica: "🎵 Música",
   videojuegos: "🎮 Videojuegos",
+  famosos: "⭐ Famosos",
 };
 
 const screens = {
@@ -321,6 +322,10 @@ document.getElementById("retry-btn").addEventListener("click", () => {
 });
 
 async function initRoles() {
+  if (!state.categoria) {
+    showError("No se seleccionó categoría. Volvé al inicio.");
+    return;
+  }
   showLoading(true);
   hideError();
   try {

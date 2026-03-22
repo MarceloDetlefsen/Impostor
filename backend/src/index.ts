@@ -1,11 +1,17 @@
 import { Elysia } from "elysia";
-import { readFileSync, existsSync } from "fs";
+import { readFileSync, existsSync, readdirSync } from "fs";
 import { join } from "path";
 
-const VALID_CATEGORIES = ["futbolistas", "musica", "videojuegos"] as const;
+const dataDir = join(import.meta.dir, "..", "data");
+
+function getValidCategories(): string[] {
+  if (!existsSync(dataDir)) return [];
+  return readdirSync(dataDir)
+    .filter((f) => f.endsWith(".csv"))
+    .map((f) => f.replace(".csv", "").toLowerCase());
+}
 
 function loadCsv(category: string): { palabra: string; pista: string }[] {
-  const dataDir = join(import.meta.dir, "..", "data");
   const filePath = join(dataDir, `${category}.csv`);
 
   if (!existsSync(filePath)) {
@@ -55,12 +61,13 @@ const app = new Elysia()
   })
   .get("/palabra", ({ query, set }) => {
     const categoria = query.categoria?.toLowerCase();
+    const validCategories = getValidCategories();
 
-    if (!categoria || !VALID_CATEGORIES.includes(categoria as (typeof VALID_CATEGORIES)[number])) {
+    if (!categoria || !validCategories.includes(categoria)) {
       set.status = 400;
       return {
         error: "Categoría inválida",
-        categoriasValidas: [...VALID_CATEGORIES],
+        categoriasValidas: validCategories,
       };
     }
 
