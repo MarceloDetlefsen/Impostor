@@ -485,7 +485,8 @@ async function remoteSync() {
     document.getElementById("reveal-impostor-name").textContent = data.result.impostorName;
     const rematchBox = document.getElementById("remote-rematch-controls");
     rematchBox.classList.toggle("hidden", !state.remote.isHost);
-    document.getElementById("play-again-btn").classList.toggle("hidden", Boolean(state.remote.code) && !state.remote.isHost);
+    document.getElementById("play-again-btn").classList.toggle("hidden", Boolean(state.remote.code));
+    document.getElementById("play-again-btn").textContent = "Jugar de nuevo";
     if (state.remote.isHost) {
       const sel = document.getElementById("remote-rematch-category");
       const keep = sel.value || state.remote.selectedCategory || state.remote.categorias[0];
@@ -502,7 +503,8 @@ function startRemotePolling() {
   stopRemotePolling();
   state.remote.pollId = setInterval(() => {
     remoteSync().catch((e) => {
-      if (String(e.message || "").toLowerCase().includes("lobby no encontrado")) {
+      const msg = String(e.message || "").toLowerCase();
+      if (msg.includes("lobby no encontrado") || msg.includes("404")) {
         resetRemoteState();
         showScreen("home");
         showError("El host terminó el lobby.");
@@ -584,7 +586,16 @@ document.getElementById("reveal-btn").addEventListener("click", () => {
   showScreen("reveal");
 });
 
-document.getElementById("play-again-btn").addEventListener("click", startGame);
+document.getElementById("play-again-btn").addEventListener("click", async () => {
+  if (state.remote.code && state.remote.isHost) {
+    try {
+      await apiPost(`/lobbies/${state.remote.code}/close`, { playerId: state.remote.playerId });
+    } catch {
+      // Si ya no existe el lobby, igual reseteamos UI local.
+    }
+  }
+  startGame();
+});
 
 document.getElementById("retry-btn").addEventListener("click", () => {
   hideError();
@@ -783,6 +794,17 @@ document.getElementById("remote-rematch-btn").addEventListener("click", async ()
     state.remote.revealed = false;
     document.getElementById("remote-revealed-btn").textContent = "Ya revelé";
     await remoteSync();
+  } catch (e) {
+    showError(e.message);
+  }
+});
+
+document.getElementById("remote-close-result-btn").addEventListener("click", async () => {
+  if (!state.remote.code || !state.remote.isHost) return;
+  try {
+    await apiPost(`/lobbies/${state.remote.code}/close`, { playerId: state.remote.playerId });
+    resetRemoteState();
+    showScreen("home");
   } catch (e) {
     showError(e.message);
   }
