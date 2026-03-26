@@ -1,34 +1,48 @@
 # 🎭 Juego del Impostor
 
-Web app para jugar el **Juego del Impostor** en grupo — un party game de palabras secretas.
+Web app para jugar **Impostor** en modo local o remoto.
 
 ## 🚀 Deploy
 
-- **Frontend:** https://impostor-lyi1s8drp-marcelodetlefsens-projects.vercel.app
-- **Backend:** https://impostor-production-e89b.up.railway.app
+- Frontend: https://impostor-lyi1s8drp-marcelodetlefsens-projects.vercel.app
+- Backend: https://impostor-production-e89b.up.railway.app
 
-## ¿Cómo se juega?
+## Modos de juego
 
-1. Eligen un **tema** (Futbolistas, Música, Videojuegos o Famosos)
-2. Ingresan el **número de jugadores** (3–8) y el **nombre** de cada uno
-3. Cada jugador ve su rol en pantallas separadas: **mantienen apretada** la tarjeta para ver su palabra o pista
-4. El **Impostor** recibe solo una pista (1–2 palabras); el resto recibe la palabra secreta
-5. Una **ruleta** sortea quién empieza
-6. Por turnos, cada uno dice **una sola palabra** relacionada
-7. Votan para descubrir al Impostor
-8. **Impostor gana** si no lo descubren o si adivina la palabra
+### 1) Modo local
 
-> El juego se juega **en persona** — la app gestiona roles, palabras y el orden de inicio.
+- Un solo dispositivo.
+- Elegís categoría y cantidad de jugadores.
+- Cada jugador revela su tarjeta manteniendo apretado.
+- Se sortea orden con ruleta.
+- Se revela impostor y palabra al final.
+
+### 2) Modo remoto (parties)
+
+- Host crea lobby y comparte código.
+- Otros entran con código.
+- Solo el host elige categoría, inicia partida, revela resultado y puede cerrar lobby.
+- Cada jugador revela su propia tarjeta desde su dispositivo.
+- Orden de inicio con ruleta.
+- Rematch sin volver a pedir nombres.
+- Si el host cierra lobby, los demás salen automáticamente.
+
+## Categorías
+
+- `futbolistas`
+- `musica`
+- `videojuegos`
+- `famosos`
 
 ## Stack
 
-- **Frontend:** HTML + CSS + JavaScript Vanilla (deploy en Vercel)
-- **Backend:** Elysia + Bun (deploy en Railway)
-- **Datos:** CSVs con palabra + pista por categoría (~50 entradas cada uno)
+- Frontend: HTML + CSS + JavaScript Vanilla
+- Backend: Elysia + Bun
+- Datos: CSV (`palabra,pista`) por categoría
 
 ## Desarrollo local
 
-### 1. Backend (Bun)
+### Backend
 
 ```bash
 cd backend
@@ -36,63 +50,61 @@ bun install
 bun run dev
 ```
 
-El API estará en `http://localhost:3000`.
+API local: `http://localhost:3000`
 
-### 2. Frontend
-
-Sirve la carpeta `frontend/` con cualquier servidor estático:
+### Frontend
 
 ```bash
 cd frontend
 npx serve .
 ```
 
-Abre `http://localhost:8080` (o el puerto que uses).
+Abre `http://localhost:8080` (o el puerto que muestre tu servidor).
 
-## Deploy
+## Config frontend
 
-### Backend (Railway)
+En `frontend/config.js`:
 
-1. Conecta el repo y selecciona la carpeta `backend/`
-2. Comando de inicio: `bun run start`
-3. Configura la variable `PORT` si el servicio lo requiere
-4. URL generada: https://impostor-production-e89b.up.railway.app
+- Local:
+```js
+window.IMPOSTOR_API_URL = "http://localhost:3000";
+```
 
-### Frontend (Vercel)
-
-1. Conecta el repo y selecciona la carpeta `frontend/`
-2. En `frontend/config.js`, asegúrate de que `IMPOSTOR_API_URL` apunte a la URL de Railway:
-
+- Producción:
 ```js
 window.IMPOSTOR_API_URL = "https://impostor-production-e89b.up.railway.app";
 ```
 
-## API
+## API principal
 
-### `GET /palabra?categoria={futbolistas|musica|videojuegos|famosos}`
+### Básica
 
-Devuelve una palabra aleatoria y su pista (ambigua, 1–2 palabras para el Impostor):
+- `GET /categorias`
+- `GET /palabra?categoria=...`
+- `GET /health`
 
-```json
-{
-  "palabra": "Messi",
-  "pista": "Argentina"
-}
-```
+### Lobbies remotos
 
-### `GET /health`
-
-Comprueba que el servidor está activo.
+- `POST /lobbies` (crear)
+- `POST /lobbies/:code/join`
+- `GET /lobbies/:code?playerId=...`
+- `POST /lobbies/:code/name`
+- `POST /lobbies/:code/ready`
+- `POST /lobbies/:code/categoria` (solo host)
+- `POST /lobbies/:code/start` (solo host)
+- `POST /lobbies/:code/reveal`
+- `POST /lobbies/:code/phase` (solo host)
+- `POST /lobbies/:code/close` (solo host)
 
 ## Estructura
 
-```
+```text
 /
 ├── frontend/
 │   ├── index.html
 │   ├── style.css
 │   ├── app.js
-│   └── config.js          # URL del backend
+│   └── config.js
 ├── backend/
 │   ├── src/index.ts
 │   └── data/
