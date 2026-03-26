@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎭 Juego del Impostor</title>
+  <title>Juego del Impostor</title>
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +15,14 @@
     <section id="screen-home" class="screen active">
       <div class="screen-content">
         <h1 class="title">Impostor</h1>
-        <p class="subtitle">Dineeeeeeeeeeeeero</p>
+        <div class="mode-select">
+          <button class="primary-btn" id="mode-local-btn">Modo local</button>
+          <button class="primary-btn" id="mode-remote-btn">Modo remoto (lobbies)</button>
+        </div>
+        <div class="local-mode-header hidden" id="local-mode-header">
+          <span>Modo local</span>
+          <button class="back-btn" id="local-mode-back">← Cambiar modo</button>
+        </div>
         <p class="instruction">Elige una categoría para comenzar</p>
         <div class="categories">
           <button class="category-btn" data-categoria="futbolistas">
@@ -35,6 +42,104 @@
             <span>Famosos</span>
           </button>
         </div>
+      </div>
+    </section>
+
+    <!-- Pantalla: Acceso remoto -->
+    <section id="screen-remote-auth" class="screen">
+      <div class="screen-content">
+        <h2 class="screen-title">Partida remota</h2>
+        <button class="primary-btn" id="remote-go-create-btn">Crear lobby</button>
+        <button class="primary-btn" id="remote-go-join-btn">Unirse a lobby</button>
+        <button class="back-btn" id="remote-back-home">← Volver</button>
+      </div>
+    </section>
+
+    <section id="screen-remote-create" class="screen">
+      <div class="screen-content">
+        <h2 class="screen-title">Crear lobby</h2>
+        <div class="names-form">
+          <input type="text" id="remote-create-name-input" placeholder="Tu nombre" maxlength="24" autocomplete="off">
+          <button class="primary-btn" id="remote-create-btn">Crear</button>
+        </div>
+        <button class="back-btn" id="remote-back-auth-from-create">← Volver</button>
+      </div>
+    </section>
+
+    <section id="screen-remote-join" class="screen">
+      <div class="screen-content">
+        <h2 class="screen-title">Unirse a lobby</h2>
+        <div class="names-form">
+          <input type="text" id="remote-code-input" placeholder="Código (ej: ABC123)" maxlength="6" autocomplete="off">
+          <button class="primary-btn" id="remote-join-btn">Entrar</button>
+        </div>
+        <button class="back-btn" id="remote-back-auth-from-join">← Volver</button>
+      </div>
+    </section>
+
+    <!-- Pantalla: Lobby remoto -->
+    <section id="screen-remote-lobby" class="screen">
+      <div class="screen-content">
+        <h2 class="screen-title">Lobby</h2>
+        <div class="lobby-code-row">
+          <p class="category-badge" id="remote-lobby-code">Código: ----</p>
+          <button class="icon-btn" id="remote-copy-code-btn" title="Copiar código">📋</button>
+        </div>
+        <div class="names-list" id="remote-players-list"></div>
+        <div class="names-form" id="remote-name-setter">
+          <input type="text" id="remote-lobby-name-input" placeholder="Tu nombre en el lobby" maxlength="24" autocomplete="off">
+          <button class="primary-btn" id="remote-save-name-btn">Guardar nombre</button>
+        </div>
+        <select id="remote-category-select" class="remote-select"></select>
+        <button class="primary-btn" id="remote-ready-btn">Estoy listo</button>
+        <button class="primary-btn hidden" id="remote-start-btn">Iniciar partida</button>
+        <button class="primary-btn hidden" id="remote-close-btn">Terminar lobby</button>
+        <button class="back-btn" id="remote-leave-btn">Salir del lobby</button>
+      </div>
+    </section>
+
+    <!-- Pantalla: Carta remota personal -->
+    <section id="screen-remote-card" class="screen">
+      <div class="screen-content">
+        <h2 class="screen-title">Tu tarjeta</h2>
+        <p class="instruction">Mantén apretada para revelar</p>
+        <div class="flip-card-container">
+          <div class="flip-card" id="remote-flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <span class="card-player-name" id="remote-card-name">Jugador</span>
+                <span class="card-hint">Toca y mantén</span>
+              </div>
+              <div class="flip-card-back" id="remote-card-back">
+                <div class="flip-card-back-content">
+                  <div class="card-back-impostor" id="remote-impostor-block">
+                    <span class="card-impostor-label">Eres el IMPOSTOR</span>
+                    <span class="card-impostor-pista" id="remote-impostor-pista">—</span>
+                  </div>
+                  <div class="card-back-normal" id="remote-normal-block">
+                    <span class="card-secret-value" id="remote-secret-value">—</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="primary-btn" id="remote-revealed-btn">Ya revelé</button>
+      </div>
+    </section>
+
+    <!-- Pantalla: Orden remoto -->
+    <section id="screen-remote-order" class="screen">
+      <div class="screen-content">
+        <h2 class="screen-title">Orden de inicio</h2>
+        <div class="roulette-wrapper">
+          <div class="roulette-pointer">▼</div>
+          <div class="roulette-viewport">
+            <div class="roulette-wheel" id="remote-roulette-wheel"></div>
+          </div>
+        </div>
+        <p class="game-order" id="remote-order-text"></p>
+        <button class="primary-btn hidden" id="remote-go-game-btn">Ir a juego</button>
       </div>
     </section>
 
@@ -143,7 +248,12 @@
           <p class="reveal-word">La palabra era: <strong id="reveal-word"></strong></p>
           <p class="reveal-impostor">El Impostor era <strong id="reveal-impostor-name"></strong></p>
         </div>
-        <button class="primary-btn" id="play-again-btn">Jugar de nuevo</button>
+        <div id="remote-rematch-controls" class="hidden rematch-box">
+          <p>¿Quieren jugar otra?</p>
+          <select id="remote-rematch-category" class="remote-select"></select>
+          <button class="primary-btn" id="remote-rematch-btn">Sí, otra ronda</button>
+        </div>
+        <button class="primary-btn" id="play-again-btn">Terminar el lobby</button>
       </div>
     </section>
 

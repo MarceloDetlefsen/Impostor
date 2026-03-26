@@ -99,6 +99,46 @@ body::before {
   font-weight: 400;
 }
 
+.mode-select {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.local-mode-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25rem 0;
+  color: var(--text-muted);
+}
+
+.lobby-code-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.icon-btn {
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  width: 42px;
+  height: 42px;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.rematch-box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .instruction {
   font-size: 0.95rem;
   color: var(--text-muted);
@@ -276,6 +316,18 @@ body::before {
 
 .names-form input::placeholder {
   color: var(--text-muted);
+}
+
+.remote-select {
+  width: 100%;
+  max-width: 300px;
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1rem;
 }
 
 .names-list {
